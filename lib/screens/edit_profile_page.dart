@@ -1,8 +1,11 @@
+import 'package:Oba/libs/auth.dart';
 import "package:flutter/material.dart";
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'main.dart'; //for currentuser & google signin instance
-import 'models/user.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import '../libs/globals.dart' as G;
+import '../models/user.dart';
+
 
 class EditProfilePage extends StatelessWidget {
   final TextEditingController nameController = TextEditingController();
@@ -30,7 +33,7 @@ class EditProfilePage extends StatelessWidget {
   applyChanges() {
     Firestore.instance
         .collection('insta_users')
-        .document(currentUserModel.id)
+        .document(G.currentUserModel.id)
         .updateData({
       "displayName": nameController.text,
       "bio": bioController.text,
@@ -63,7 +66,7 @@ class EditProfilePage extends StatelessWidget {
     return FutureBuilder(
         future: Firestore.instance
             .collection('insta_users')
-            .document(currentUserModel.id)
+            .document(G.currentUserModel.id)
             .get(),
         builder: (context, snapshot) {
           if (!snapshot.hasData)
@@ -81,7 +84,7 @@ class EditProfilePage extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.only(top: 16.0, bottom: 8.0),
                 child: CircleAvatar(
-                  backgroundImage: NetworkImage(currentUserModel.photoUrl),
+                  backgroundImage: NetworkImage(G.currentUserModel.photoUrl),
                   radius: 50.0,
                 ),
               ),
@@ -120,13 +123,14 @@ class EditProfilePage extends StatelessWidget {
 
   void _logout(BuildContext context) async {
     print("logout");
-    await auth.signOut();
-    await googleSignIn.signOut();
+    //await auth.signOut();
+    //await googleSignIn.signOut();
+    AuthService().signOut();
 
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.clear();
 
-    currentUserModel = null;
+    G.currentUserModel = null;
 
     Navigator.pop(context);
   }

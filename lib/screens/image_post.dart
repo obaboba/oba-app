@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'main.dart';
 import 'dart:async';
 import 'profile_page.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'comment_screen.dart';
 import 'package:flare_flutter/flare_actor.dart';
+
+import '../libs/globals.dart' as G;
 
 class ImagePost extends StatefulWidget {
   const ImagePost(
@@ -201,7 +202,7 @@ class _ImagePost extends State<ImagePost> {
 
   @override
   Widget build(BuildContext context) {
-    liked = (likes[googleSignIn.currentUser.id.toString()] == true);
+    liked = (likes[G.currentUserModel.id] == true);
 
     return Column(
       mainAxisSize: MainAxisSize.min,
@@ -256,7 +257,7 @@ class _ImagePost extends State<ImagePost> {
   }
 
   void _likePost(String postId2) {
-    var userId = googleSignIn.currentUser.id;
+    var userId = G.currentUserModel.id;
     bool _liked = likes[userId] == true;
 
     if (_liked) {
@@ -302,10 +303,10 @@ class _ImagePost extends State<ImagePost> {
         .collection("items")
         .document(postId)
         .setData({
-      "username": currentUserModel.username,
-      "userId": currentUserModel.id,
+      "username": G.currentUserModel.username,
+      "userId": G.currentUserModel.id,
       "type": "like",
-      "userProfileImg": currentUserModel.photoUrl,
+      "userProfileImg": G.currentUserModel.photoUrl,
       "mediaUrl": mediaUrl,
       "timestamp": DateTime.now(),
       "postId": postId,

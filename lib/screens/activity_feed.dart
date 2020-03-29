@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'image_post.dart'; //needed to open image when clicked
 import 'profile_page.dart'; // to open the profile page when username clicked
-import 'main.dart'; //needed for currentuser id
+
+import '../libs/globals.dart' as G;
 
 class ActivityFeedPage extends StatefulWidget {
   @override
@@ -47,7 +48,7 @@ class _ActivityFeedPageState extends State<ActivityFeedPage> with AutomaticKeepA
     List<ActivityFeedItem> items = [];
     var snap = await Firestore.instance
         .collection('insta_a_feed')
-        .document(currentUserModel.id)
+        .document(G.currentUserModel.id)
         .collection("items")
         .orderBy("timestamp")
         .getDocuments();

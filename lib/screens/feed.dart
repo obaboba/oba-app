@@ -1,10 +1,13 @@
+import 'package:Oba/screens/shared/topbar.dart';
 import 'package:flutter/material.dart';
-import 'image_post.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
 import 'dart:async';
-import 'main.dart';
 import 'dart:io';
 import 'dart:convert';
-import 'package:shared_preferences/shared_preferences.dart';
+
+import 'image_post.dart';
+import '../libs/globals.dart' as G;
 
 class Feed extends StatefulWidget {
   _Feed createState() => _Feed();
@@ -36,13 +39,7 @@ class _Feed extends State<Feed> with AutomaticKeepAliveClientMixin<Feed> {
     super.build(context); // reloads state when opened again
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Fluttergram',
-            style: const TextStyle(
-                fontFamily: "Billabong", color: Colors.black, fontSize: 35.0)),
-        centerTitle: true,
-        backgroundColor: Colors.white,
-      ),
+      appBar: TopBar(context),
       body: RefreshIndicator(
         onRefresh: _refresh,
         child: buildFeed(),
@@ -79,7 +76,8 @@ class _Feed extends State<Feed> with AutomaticKeepAliveClientMixin<Feed> {
 
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
-    String userId = googleSignIn.currentUser.id.toString();
+    //String userId = googleSignIn.currentUser.id.toString();
+    String userId = G.currentUserModel.id;
     var url =
         'https://us-central1-oba2-b6b5f.cloudfunctions.net/getFeed?uid=' + userId;
     var httpClient = HttpClient();

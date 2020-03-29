@@ -4,10 +4,11 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:uuid/uuid.dart';
 import 'dart:async';
-import 'main.dart';
 import 'dart:io';
-import 'location.dart';
+import '../libs/location.dart';
 import 'package:geocoder/geocoder.dart';
+
+import '../libs/globals.dart' as G;
 
 class Uploader extends StatefulWidget {
   _Uploader createState() => _Uploader();
@@ -217,7 +218,7 @@ class PostForm extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: <Widget>[
             CircleAvatar(
-              backgroundImage: NetworkImage(currentUserModel.photoUrl),
+              backgroundImage: NetworkImage(G.currentUserModel.photoUrl),
             ),
             Container(
               width: 250.0,
@@ -276,12 +277,12 @@ void postToFireStore(
   var reference = Firestore.instance.collection('insta_posts');
 
   reference.add({
-    "username": currentUserModel.username,
+    "username": G.currentUserModel.username,
     "location": location,
     "likes": {},
     "mediaUrl": mediaUrl,
     "description": description,
-    "ownerId": googleSignIn.currentUser.id,
+    "ownerId": G.currentUserModel.id,
     "timestamp": DateTime.now(),
   }).then((DocumentReference doc) {
     String docId = doc.documentID;

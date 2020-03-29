@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'main.dart';
+import '../main.dart';
 import 'image_post.dart';
 import 'dart:async';
 import 'edit_profile_page.dart';
-import 'models/user.dart';
+import '../models/user.dart';
+import '../libs/globals.dart' as G;
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({this.userId});
@@ -17,7 +18,7 @@ class ProfilePage extends StatefulWidget {
 class _ProfilePage extends State<ProfilePage>
     with AutomaticKeepAliveClientMixin<ProfilePage> {
   final String profileId;
-  String currentUserId = googleSignIn.currentUser.id;
+  String currentUserId = G.currentUserModel.id;
   String view = "grid"; // default view
   bool isFollowing = false;
   bool followButtonClicked = false;
@@ -92,10 +93,10 @@ class _ProfilePage extends State<ProfilePage>
         .document(currentUserId)
         .setData({
       "ownerId": profileId,
-      "username": currentUserModel.username,
+      "username": G.currentUserModel.username,
       "userId": currentUserId,
       "type": "follow",
-      "userProfileImg": currentUserModel.photoUrl,
+      "userProfileImg": G.currentUserModel.photoUrl,
       "timestamp": DateTime.now()
     });
   }

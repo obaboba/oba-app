@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import "dart:async";
-import "main.dart"; //for current user
+import "../libs/globals.dart" as G; //for current user
 
 class CommentScreen extends StatefulWidget {
   final String postId;
@@ -99,11 +99,11 @@ class _CommentScreenState extends State<CommentScreen> {
         .document(postId)
         .collection("comments")
         .add({
-      "username": currentUserModel.username,
+      "username": G.currentUserModel.username,
       "comment": comment,
       "timestamp": DateTime.now(),
-      "avatarUrl": currentUserModel.photoUrl,
-      "userId": currentUserModel.id
+      "avatarUrl": G.currentUserModel.photoUrl,
+      "userId": G.currentUserModel.id
     });
 
     //adds to postOwner's activity feed
@@ -112,10 +112,10 @@ class _CommentScreenState extends State<CommentScreen> {
         .document(postOwner)
         .collection("items")
         .add({
-      "username": currentUserModel.username,
-      "userId": currentUserModel.id,
+      "username": G.currentUserModel.username,
+      "userId": G.currentUserModel.id,
       "type": "comment",
-      "userProfileImg": currentUserModel.photoUrl,
+      "userProfileImg": G.currentUserModel.photoUrl,
       "commentData": comment,
       "timestamp": DateTime.now(),
       "postId": postId,
